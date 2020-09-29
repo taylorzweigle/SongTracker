@@ -1,0 +1,25 @@
+i {
+    cursor: pointer;
+}
+
+.row {
+    cursor: default;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.iconTrue {
+    color: #28a745;
+}
+
+.iconFalse {
+    color: #e9ecef;
+}
+
+.iconDelete:hover {
+    color: #dc3545;
+}
+
+#countCell {
+    text-align: center;
+}
