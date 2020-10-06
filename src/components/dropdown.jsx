@@ -2,15 +2,21 @@ import React, { Component } from "react";
 
 class Dropdown extends Component {
     render() {
-        const { id, label, options } = this.props;
+        const { id, name, label, options, value, onChange } = this.props;
 
         return (
             <React.Fragment>
-                <label for={id}>{label}</label>
-                <select class="custom-select" id={id}>
-                    <option selected></option>
+                <label htmlFor={id}>{label}</label>
+                <select
+                    className="custom-select"
+                    id={id}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                >
+                    <option defaultValue></option>
                     {options.map(option =>
-                        <option value={option}>{option}</option>
+                        <option key={option} value={option}>{option}</option>
                     )}
                 </select>
             </React.Fragment>

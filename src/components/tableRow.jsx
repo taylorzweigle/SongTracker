@@ -7,7 +7,7 @@ class TableRow extends Component {
         let checkmarkClasses = "fa fa-lg ";
 
         if(completed === true) { checkmarkClasses += "fa-check-circle iconTrue"; }
-        else { checkmarkClasses += "fa-circle-o iconFalse"; }
+        else { checkmarkClasses += "fa-circle-o"; }
 
         return checkmarkClasses;
     }

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { getSongs } from "../services/fakeSongsDatabase";
+import { getSongs } from "../services/songs";
 import Search from "../components/search";
+import FilterBar from "../components/filterBar";
 import TableHeader from "../components/tableHeader";
 import TableRow from "../components/tableRow";
 import Count from "../components/count";
@@ -9,7 +10,9 @@ import Count from "../components/count";
 class SongPage extends Component {
     state = {
         songs: [],
-        searchQuery: ""
+        tunings: ["Standard", "Drop D", "Eb", "Drop Db"],
+        searchQuery: "",
+        selectedTuning: "All"
     };
 
     componentDidMount() {
@@ -17,14 +20,21 @@ class SongPage extends Component {
     }
 
     getPageData = () => {
-        let { songs, searchQuery } = this.state,
+        let { songs, searchQuery, selectedTuning } = this.state,
             filteredSongs = songs,
             totalCount = 0,
             completedCount = 0,
             toDoCount = 0;
 
         if(searchQuery) {
-            filteredSongs = songs.filter((s) => s.song.toLowerCase().startsWith(searchQuery.toLowerCase()));
+            filteredSongs = songs.filter((s) => 
+                s.song.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+                s.artist.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+                s.album.toLowerCase().startsWith(searchQuery.toLowerCase())
+            );
+        }
+        else if(selectedTuning !== "All") {
+            filteredSongs = songs.filter((s) => s.tuning === selectedTuning);
         }
 
         for(let s of songs) {
@@ -41,6 +51,10 @@ class SongPage extends Component {
 
     handleSearch = (query) => {
         this.setState({ searchQuery: query });
+    };
+
+    handleTuning = (tuning) => {
+        this.setState({ selectedTuning: tuning });
     };
 
     handleComplete = (song) => {
@@ -63,7 +77,7 @@ class SongPage extends Component {
     };
 
     render() {
-        const { searchQuery } = this.state;
+        const { searchQuery, tunings } = this.state;
         const { songs, totalCount, completedCount, toDoCount } = this.getPageData();
 
         return (
@@ -73,23 +87,28 @@ class SongPage extends Component {
                         <div className="col-xl">
                             <Search value={searchQuery} onChange={this.handleSearch} />
                         </div>
+                        <div className="col-xl-4">
+                            <FilterBar options={tunings} onOptionSelect={this.handleTuning} />
+                        </div>
                         <div className="col-xl-2">
                             <Link to="/newSong" className="btn btn-primary">Add Song</Link>
                         </div>
                     </div>
                     <div className="row">
-                        <table className="table table-sm table-hover">
-                            <TableHeader />
-                            <tbody>
-                                {songs.map(song => 
-                                    <TableRow
-                                        key={song._id}
-                                        song={song}
-                                        onComplete={this.handleComplete}
-                                        onDelete={this.handleDelete} />
-                                )}
-                            </tbody>
-                        </table>
+                        <div className="overflow-auto overflow-row">
+                            <table className="table table-sm table-hover">
+                                <TableHeader />
+                                <tbody>
+                                    {songs.map(song => 
+                                        <TableRow
+                                            key={song._id}
+                                            song={song}
+                                            onComplete={this.handleComplete}
+                                            onDelete={this.handleDelete} />
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div id="countRow" className="row">
                         <div id="countCell" className="col-xl">

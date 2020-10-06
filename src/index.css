@@ -1,5 +1,6 @@
 i {
     cursor: pointer;
+    color: #6c757d;
 }
 
 .row {
@@ -12,12 +13,13 @@ i {
     color: #28a745;
 }
 
-.iconFalse {
-    color: #e9ecef;
-}
-
 .iconDelete:hover {
     color: #dc3545;
+}
+
+.overflow-row {
+    height: 26rem;
+    width: 100%;
 }
 
 #countCell {

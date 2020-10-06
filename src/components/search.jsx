@@ -9,7 +9,7 @@ class Search extends Component {
                 type="text"
                 className="form-control"
                 id="searchBox"
-                placeholder="Search..."
+                placeholder="Search Songs, Artists, or Albums..."
                 value={value}
                 onChange={(e) => onChange(e.currentTarget.value)} />
         );

@@ -2,12 +2,18 @@ import React, { Component } from "react";
 
 class TextInput extends Component {
     render() {
-        const { id, label } = this.props;
+        const { id, name, label, value, onChange } = this.props;
 
         return (
             <React.Fragment>
-                <label for={id}>{label}</label>
-                <input type="text" className="form-control" id={id} />
+                <label htmlFor={id}>{label}</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id={id}
+                    name={name}
+                    value={value}
+                    onChange={onChange} />
             </React.Fragment>
         );
     }
