@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { getSongs } from "../services/songs";
+import api from "../api/api";
 import Search from "../components/search";
 import FilterBar from "../components/filterBar";
 import TableHeader from "../components/tableHeader";
@@ -16,7 +16,25 @@ class SongPage extends Component {
     };
 
     componentDidMount() {
-        this.setState({ songs: getSongs() });
+        this.getSongs();
+    }
+
+    async getSongs() {
+        await api.getSongs().then(songs => {
+            this.setState({ songs: songs.data.data });
+        });
+    }
+
+    async updateSong(song, completed) {
+        await api.updateSong(song._id, { "completed": completed });
+
+        this.getSongs();
+    }
+
+    async deleteSong(song) {
+        await api.deleteSong(song._id);
+
+        this.getSongs();
     }
 
     getPageData = () => {
@@ -57,23 +75,18 @@ class SongPage extends Component {
         this.setState({ selectedTuning: tuning });
     };
 
-    handleComplete = (song) => {
-        let { songs } = this.state;
+    handleComplete = async (song) => {
+        let completed;
 
-        songs = [...songs];
-        const index = songs.indexOf(song);
-        songs[index] = {...songs[index]};
-        songs[index].completed = !songs[index].completed;
-
-        this.setState({ songs });
+        await api.getSongById(song._id).then(song => {
+            completed = !song.data.data.completed;
+        });
+        
+        this.updateSong(song, completed);
     };
 
     handleDelete = (song) => {
-        let { songs } = this.state;
-
-        songs = songs.filter(s => s._id !== song._id);
-
-        this.setState({ songs });
+        this.deleteSong(song);
     };
 
     render() {
@@ -91,7 +104,7 @@ class SongPage extends Component {
                             <FilterBar options={tunings} onOptionSelect={this.handleTuning} />
                         </div>
                         <div className="col-xl-2">
-                            <Link to="/newSong" className="btn btn-primary">Add Song</Link>
+                            <Link to="/song" className="btn btn-primary">Add Song</Link>
                         </div>
                     </div>
                     <div className="row">

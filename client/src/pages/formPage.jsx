@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import api from "../api/api";
 import TextInput from "../components/textInput";
 import Dropdown from "../components/dropdown";
-import { saveSong } from "../services/songs";
 
 class FormPage extends Component {
     state = {
@@ -26,11 +25,26 @@ class FormPage extends Component {
         this.setState({ data });
     };
 
-    handleSubmit = () => {
-        saveSong(this.state.data);
+    handleSubmit = async (e) => {
+        this.saveSong();
 
         this.props.history.push("/songs");
     };
+
+    async saveSong() {
+        const { song, artist, album, genre, tuning } = this.state.data;
+
+        const newSong = {
+            "song": song ? song : "null",
+            "artist": artist ? artist : "null",
+            "album": album ? album : "null",
+            "genre": genre ? genre : "null",
+            "tuning": tuning ? tuning : "null",
+            "completed": false
+        };
+
+        await api.createSong(newSong);
+    }
 
     render() {
         const { data } = this.state;
@@ -93,7 +107,7 @@ class FormPage extends Component {
                     </div>
                     <div className="row">
                         <div className="col-xl-1">
-                            <Link to="/songs" className="btn btn-secondary">Cancel</Link>
+                            <button className="btn btn-secondary">Cancel</button>
                         </div>
                         <div className="col-xl">
                             <button className="btn btn-primary">Create</button>

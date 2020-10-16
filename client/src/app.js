@@ -7,9 +7,9 @@ function App() {
     return (
         <main>
             <Switch>
-                <Route path="/songs/:id" component={FormPage} />
+                <Route path="/song/:id" component={FormPage} />
                 <Route path="/songs" component={SongPage} />
-                <Route path="/newSong" component={FormPage} />
+                <Route path="/song" component={FormPage} />
                 <Redirect from="/" exact to="/songs" />
             </Switch>
         </main>
