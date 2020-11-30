@@ -10,6 +10,7 @@ class TextInput extends Component {
                 <input
                     type="text"
                     className="form-control"
+                    autoComplete="off"
                     id={id}
                     name={name}
                     value={value}

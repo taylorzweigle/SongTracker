@@ -10,6 +10,7 @@ class Search extends Component {
                 className="form-control"
                 id="searchBox"
                 placeholder="Search Songs, Artists, or Albums..."
+                autoComplete="off"
                 value={value}
                 onChange={(e) => onChange(e.currentTarget.value)} />
         );
