@@ -1,25 +1,23 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Count extends Component {
-    updateSpan() {
-        const { type } = this.props;
+const Count = (props) => {
+    const { type, count, selected, onSelectCount } = props;
 
+    const updateBadgeSpan = () => {
         let spanClasses = "badge badge-";
 
         if(type === "Total") { spanClasses += "primary" }
-        else if(type === "Learned") { spanClasses += "success" }
+        else if(type === "Completed") { spanClasses += "success" }
         else if(type === "To Do") { spanClasses += "warning" }
 
         return spanClasses;
-    }
+    };
 
-    render() {
-        const { type, count } = this.props;
-
-        return (
-            <h5>{type} Songs: <span className={this.updateSpan()}>{count}</span></h5>
-        );
-    }
+    return (
+        <div className={`count-cell${selected ? "-selected" : ""}`} onClick={() => onSelectCount(type)}>
+            <h5>{type} Songs: <span className={updateBadgeSpan()}>{count}</span></h5>
+        </div>
+    );
 };
 
 export default Count;

@@ -1,18 +1,21 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import _ from "lodash";
+
 import api from "../api/api";
 import Search from "../components/search";
 import FilterBar from "../components/filterBar";
 import TableHeader from "../components/tableHeader";
 import TableRow from "../components/tableRow";
-import Count from "../components/count";
+import CountGroup from "../components/countGroup";
 
 class SongPage extends Component {
     state = {
         songs: [],
         tunings: ["Standard", "Drop D", "Eb", "Drop Db"],
         searchQuery: "",
-        selectedTuning: "All"
+        selectedTuning: "All",
+        selectedCountType: "Total",
     };
 
     componentDidMount() {
@@ -25,10 +28,14 @@ class SongPage extends Component {
         });
     }
 
-    async updateSong(song, completed) {
+    async completeSong(song, completed) {
         await api.updateSong(song._id, { "completed": completed });
 
         this.getSongs();
+    }
+
+    async editSong(song) {
+        this.props.history.push(`/song/${song._id}`);
     }
 
     async deleteSong(song) {
@@ -38,11 +45,13 @@ class SongPage extends Component {
     }
 
     getPageData = () => {
-        let { songs, searchQuery, selectedTuning } = this.state,
-            filteredSongs = songs,
-            totalCount = 0,
-            completedCount = 0,
-            toDoCount = 0;
+        let { songs, searchQuery, selectedTuning, selectedCountType } = this.state;
+        let filteredSongs = songs;
+        let counts = {};
+        let totalCount = 0;
+        let completedCount = 0;
+        let toDoCount = 0;
+        let selectedCount = [true, false, false];
 
         if(searchQuery) {
             filteredSongs = songs.filter((s) => 
@@ -54,26 +63,45 @@ class SongPage extends Component {
         else if(selectedTuning !== "All") {
             filteredSongs = songs.filter((s) => s.tuning === selectedTuning);
         }
+        else if(selectedCountType !== "Total") {
+            if(selectedCountType === "Completed") {
+                filteredSongs = songs.filter((s) => s.completed === true);
+            }
+            else if(selectedCountType === "To Do") {
+                filteredSongs = songs.filter((s) => s.completed === false);
+            }
+        }
+
+        let sortedSongs = _.orderBy(_.orderBy(filteredSongs, "song", "asc"), "artist", "asc");
 
         for(let s of songs) {
-            if(s.completed) {
-                completedCount++;
-            }
+            if(s.completed) { completedCount++; }
         }
 
         totalCount = songs.length;
         toDoCount = totalCount - completedCount;
 
-        return { songs: filteredSongs, totalCount, completedCount, toDoCount };
+        for(let i = 0; i < selectedCount.length; i++) { selectedCount[i] = false; }
+
+        if(selectedCountType === "Total") { selectedCount[0] = true; }
+        if(selectedCountType === "Completed") { selectedCount[1] = true; }
+        if(selectedCountType === "To Do") { selectedCount[2] = true; }
+
+        counts = [
+            { "Name": "Total", "Count": totalCount, "Selected": selectedCount[0] },
+            { "Name": "Completed", "Count": completedCount, "Selected": selectedCount[1] },
+            { "Name": "To Do", "Count": toDoCount, "Selected": selectedCount[2] }
+        ];
+
+        return { songs: sortedSongs, counts };
     };
 
-    handleSearch = (query) => {
-        this.setState({ searchQuery: query });
-    };
+    //Handle Filters
+    handleSearchFilter = (query) => { this.setState({ searchQuery: query }); };
 
-    handleTuning = (tuning) => {
-        this.setState({ selectedTuning: tuning });
-    };
+    handleTuningFilter = (tuning) => { this.setState({ selectedTuning: tuning }); };
+
+    handleCountFilter = (type) => { this.setState({ selectedCountType: type }); };
 
     handleComplete = async (song) => {
         let completed;
@@ -82,34 +110,39 @@ class SongPage extends Component {
             completed = !song.data.data.completed;
         });
         
-        this.updateSong(song, completed);
+        this.completeSong(song, completed);
     };
 
-    handleDelete = (song) => {
-        this.deleteSong(song);
-    };
+    handleEdit = async (song) => { this.editSong(song) };
+
+    handleDelete = (song) => { this.deleteSong(song); };
 
     render() {
         const { searchQuery, tunings } = this.state;
-        const { songs, totalCount, completedCount, toDoCount } = this.getPageData();
+        const { songs, counts } = this.getPageData();
 
         return (
             <React.Fragment>
                 <div className="container">
                     <div className="row">
                         <div className="col-xl">
-                            <Search value={searchQuery} onChange={this.handleSearch} />
+                            <Search value={searchQuery} onChange={this.handleSearchFilter} />
                         </div>
                         <div className="col-xl-4">
-                            <FilterBar options={tunings} onOptionSelect={this.handleTuning} />
+                            <FilterBar options={tunings} onOptionSelect={this.handleTuningFilter} />
                         </div>
                         <div className="col-xl-2">
-                            <Link to="/song" className="btn btn-primary">Add Song</Link>
+                            <Link to="/song" className="btn btn-primary">
+                                <span style={{ paddingRight: "0.5em" }}>
+                                    <i className="fa fa-plus fa-sm icon-white" />
+                                </span>
+                                <span>Add Song</span>
+                            </Link>
                         </div>
                     </div>
                     <div className="row">
                         <div className="overflow-auto overflow-row">
-                            <table className="table table-sm table-hover">
+                            <table className="table table-dark table-sm table-hover">
                                 <TableHeader />
                                 <tbody>
                                     {songs.map(song => 
@@ -117,23 +150,14 @@ class SongPage extends Component {
                                             key={song._id}
                                             song={song}
                                             onComplete={this.handleComplete}
+                                            onEdit={this.handleEdit}
                                             onDelete={this.handleDelete} />
                                     )}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div id="countRow" className="row">
-                        <div id="countCell" className="col-xl">
-                            <Count type="Total" count={totalCount} />
-                        </div>
-                        <div id="countCell" className="col-xl">
-                            <Count type="Learned" count={completedCount} />
-                        </div>
-                        <div id="countCell" className="col-xl">
-                            <Count type="To Do" count={toDoCount} />
-                        </div>
-                    </div>
+                    <CountGroup counts={counts} onSelectCount={this.handleCountFilter} />
                 </div>
             </React.Fragment>
         );

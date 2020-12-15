@@ -8,7 +8,7 @@ class Dropdown extends Component {
             <React.Fragment>
                 <label htmlFor={id}>{label}</label>
                 <select
-                    className="custom-select"
+                    className="form-control"
                     id={id}
                     name={name}
                     value={value}

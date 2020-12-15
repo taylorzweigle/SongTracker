@@ -1,13 +1,16 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import api from "../api/api";
 import TextInput from "../components/textInput";
 import Dropdown from "../components/dropdown";
 
-class FormPage extends Component {
+class NewSongPage extends Component {
     state = {
         genres: ["Country", "Rock"],
         tunings: ["Standard", "Drop D", "Eb", "Drop Db"],
         data: {
+            _id: "",
             song: "",
             artist: "",
             album: "",
@@ -15,6 +18,28 @@ class FormPage extends Component {
             tuning: "",
             completed: ""
         },
+    };
+
+    componentDidMount() {
+        this.getSong(this.props.match.params.id);
+    }
+
+    async getSong(id) {
+        await api.getSongById(id).then(song => {
+            const { _id, song: name, artist, album, genre, tuning, completed } = song.data.data;
+
+            const data = {
+                "_id" : _id ? _id : "null",
+                "song": name ? name : "null",
+                "artist": artist ? artist : "null",
+                "album": album ? album : "null",
+                "genre": genre ? genre : "null",
+                "tuning": tuning ? tuning : "null",
+                "completed": completed ? completed : false
+            };
+
+            this.setState({ data });
+        });
     }
 
     handleChange = (e) => {
@@ -107,7 +132,7 @@ class FormPage extends Component {
                     </div>
                     <div className="row">
                         <div className="col-xl-1">
-                            <button className="btn btn-secondary">Cancel</button>
+                            <Link to="/songs" className="btn btn-secondary">Cancel</Link>
                         </div>
                         <div className="col-xl">
                             <button className="btn btn-primary">Create</button>
@@ -119,4 +144,4 @@ class FormPage extends Component {
     }
 };
 
-export default FormPage;
+export default NewSongPage;

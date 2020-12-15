@@ -1,6 +1,29 @@
 i {
     cursor: pointer;
-    color: #6c757d;
+    color: #c0ccd7;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #ffffff;
+}
+
+body {
+    background-color: #1d2023 !important;
+}
+
+label {
+    color: #ffffff;
+}
+
+.form-control {
+    color: #ffffff !important;
+    background-color: #000000 !important;
+    border: 1px solid #6c757d !important;
+}
+
+.table-header-cell {
+    background-color: #000000 !important;
+    border: 1px solid #000000 !important;
 }
 
 .row {
@@ -9,12 +32,13 @@ i {
     padding-bottom: 1rem;
 }
 
-.iconTrue {
-    color: #28a745;
+.table-row-emphasis {
+    color: #ffffff;
+    font-weight: bold;
 }
 
-.iconDelete:hover {
-    color: #dc3545;
+.table-row-mute {
+    color: #c0ccd7;
 }
 
 .overflow-row {
@@ -22,6 +46,28 @@ i {
     width: 100%;
 }
 
-#countCell {
+.icon-white { color: #ffffff; }
+.icon-green { color: #28a745; }
+.icon-green-hover:hover { color: #28a745; }
+.icon-blue-hover:hover { color: #007bff; }
+.icon-yellow-hover:hover { color: #ffc107; }
+.icon-red-hover:hover { color: #dc3545; }
+
+.count-cell {
+    cursor: pointer;
     text-align: center;
+    padding: 0.75rem 0rem;
+    border-radius: 0.5rem;
+}
+
+.count-cell-selected {
+    cursor: pointer;
+    text-align: center;
+    padding: 0.75rem 0rem;
+    border-radius: 0.5rem;
+    background-color: #454d55;
+}
+
+.count-cell:hover {
+    background-color: #454d55;
 }
