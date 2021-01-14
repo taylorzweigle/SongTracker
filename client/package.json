@@ -1,5 +1,5 @@
 {
-  "name": "test-song-tracker",
+  "name": "song-tracker",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,6 +14,7 @@
     "mongoose": "^5.10.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3"
   },

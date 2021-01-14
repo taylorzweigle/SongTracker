@@ -1,8 +1,9 @@
+//Taylor Zweigle, 2021
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 
-import api from "../api/api";
+import api from "../api";
 import Search from "../components/search";
 import FilterBar from "../components/filterBar";
 import TableHeader from "../components/tableHeader";
@@ -96,7 +97,6 @@ class SongPage extends Component {
         return { songs: sortedSongs, counts };
     };
 
-    //Handle Filters
     handleSearchFilter = (query) => { this.setState({ searchQuery: query }); };
 
     handleTuningFilter = (tuning) => { this.setState({ selectedTuning: tuning }); };

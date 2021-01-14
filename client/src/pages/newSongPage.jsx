@@ -1,7 +1,8 @@
+//Taylor Zweigle, 2021
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import api from "../api/api";
+import api from "../api";
 import TextInput from "../components/textInput";
 import Dropdown from "../components/dropdown";
 

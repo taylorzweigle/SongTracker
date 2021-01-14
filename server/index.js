@@ -1,6 +1,8 @@
+//Taylor Zweigle, 2021
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
 const db = require("./database/database");
 const router = require("./routes/router");
 

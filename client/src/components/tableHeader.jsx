@@ -1,3 +1,4 @@
+//Taylor Zweigle, 2021
 import React, { Component } from "react";
 
 class TableHeader extends Component {

@@ -8,5 +8,7 @@ Simple project to practice creating a MERN (MongoDB, ExpressJS, ReactJS, NodeJS)
 
 Songs can be added to the database via a form, and can be edited or deleted. As songs are learned, they can be checked off for completion.
 
+## Screenshots
+
 ![song-tracker-01](https://github.com/taylorzweigle/SongTracker/blob/master/img/song-tracker-01.PNG)
 ![song-tracker-02](https://github.com/taylorzweigle/SongTracker/blob/master/img/song-tracker-02.PNG)

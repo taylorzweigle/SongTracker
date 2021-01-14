@@ -1,3 +1,4 @@
+//Taylor Zweigle, 2021
 import React from "react";
 
 const Count = (props) => {

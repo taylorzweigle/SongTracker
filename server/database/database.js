@@ -1,3 +1,4 @@
+//Taylor Zweigle, 2021
 const mongoose = require("mongoose");
 
 const db = mongoose.connection;
